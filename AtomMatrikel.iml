@@ -8,5 +8,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="rome:rome:1.0" level="project" />
+    <orderEntry type="library" name="sqljdbc42" level="project" />
+    <orderEntry type="library" name="org.kie.modules:org-apache-commons-net:6.5.0.Final" level="project" />
+    <orderEntry type="library" name="org.yaml:snakeyaml:1.18" level="project" />
+    <orderEntry type="library" name="org.ow2.petals:petals-sl-postgresql-9.4-1201-jdbc4:1.1.1" level="project" />
   </component>
 </module>
