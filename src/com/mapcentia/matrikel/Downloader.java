@@ -40,6 +40,7 @@ public final class Downloader {
         FTPClient ftpClient = new FTPClient();
         ftpClient.setBufferSize(1024 * 1024);
         ftpClient.setDefaultTimeout(1000);
+        ftpClient.setControlEncoding("UTF-8");
         ftpClient.setDataTimeout(10000);
         ZipFile zipFile = new ZipFile();
         Parser parser = new Parser();
@@ -73,7 +74,6 @@ public final class Downloader {
                 break;
             }
 
-            track.storeInDb(currentDate.toString());
 
             System.out.println("Published Date: " + entry.getPublishedDate() + "\n");
 
@@ -82,6 +82,7 @@ public final class Downloader {
                 System.out.println("Link: " + link.getHref());
                 fileName = link.getHref().split("/")[7];
                 elavsKode = Integer.valueOf(fileName.split("_")[0]);
+                track.storeInDb(currentDate.toString(), elavsKode);
 
                 // Get the file
                 this.c(ftpClient, fileName, zipFile);
@@ -97,10 +98,12 @@ public final class Downloader {
                 file.delete();
             }
 
+
         }
         // logout the user, returned true if logout successfully
         ftpClient.disconnect();
-        System.out.println("FTP forbindelse afbrydes...");
+        System.out.println("Alt hentet...");
+        System.out.println("FTP forbindelse afbrydes.");
 
 
     }
@@ -148,7 +151,7 @@ public final class Downloader {
         }
         if (login) {
             System.out.println("Forbindelse etableret...");
-            ftpClient.setSoTimeout(100);
+            ftpClient.setSoTimeout(500);
         } else {
             System.out.println("Login fejlede...");
             ftpClient.disconnect();

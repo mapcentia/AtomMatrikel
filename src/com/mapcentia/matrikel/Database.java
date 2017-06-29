@@ -59,9 +59,11 @@ public class Database {
         String rel = configuration.getSchema() + "." + "optagetvej";
         deleteElav(rel, elavsKode);
         Connection c = Connect.getConnection();
+        PreparedStatement pstmtDelete = c.prepareStatement("DELETE FROM " + rel + " WHERE uuid=?");
         PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromGML(?,25832))");
         int count = 1;
         for (OptagetVej item : optagetVeje) {
+            pstmtDelete.setObject(1, item.uuid);
             int n = 0;
             System.out.print("\rIndsætter optaget veje... " + count);
             System.out.flush();
@@ -79,6 +81,7 @@ public class Database {
                     pstmt.setString(++n, (String) f.get(item));
                 }
             }
+            pstmtDelete.executeUpdate();
             pstmt.executeUpdate();
             count++;
         }
@@ -122,9 +125,11 @@ public class Database {
         String rel = configuration.getSchema() + "." + "fredskov";
         deleteElav(rel, elavsKode);
         Connection c = Connect.getConnection();
-        PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromGML(?,25832))");
+        PreparedStatement pstmtDelete = c.prepareStatement("DELETE FROM " + rel + " WHERE uuid=?");
+        PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(?,?,?,?,?,?,?,?,?,?,?,ST_MULTI(ST_GeomFromGML(?,25832)))");
         int count = 1;
         for (Fredskov item : fredskove) {
+            pstmtDelete.setObject(1, item.uuid);
             int n = 0;
             System.out.print("\rIndsætter fredskove... " + count);
             System.out.flush();
@@ -142,6 +147,7 @@ public class Database {
                     pstmt.setString(++n, (String) f.get(item));
                 }
             }
+            pstmtDelete.executeUpdate();
             pstmt.executeUpdate();
             count++;
         }
@@ -153,11 +159,13 @@ public class Database {
         String rel = configuration.getSchema() + "." + "strandbeskyttelse";
         deleteElav(rel, elavsKode);
         Connection c = Connect.getConnection();
-        PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromGML(?,25832))");
+        PreparedStatement pstmtDelete = c.prepareStatement("DELETE FROM " + rel + " WHERE uuid=?");
+        PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(?,?,?,?,?,?,?,?,?,?,?,ST_MULTI(ST_GeomFromGML(?,25832)))");
         int count = 1;
         for (Strandbeskyttelse item : strandbeskyttelser) {
+            pstmtDelete.setObject(1, item.uuid);
             int n = 0;
-            System.out.print("\rIndsætter fredskove... " + count);
+            System.out.print("\rIndsætter strandbeskyttelser... " + count);
             System.out.flush();
             Field[] fields = item.getClass().getDeclaredFields();
             for (Field f : fields) {
@@ -173,6 +181,7 @@ public class Database {
                     pstmt.setString(++n, (String) f.get(item));
                 }
             }
+            pstmtDelete.executeUpdate();
             pstmt.executeUpdate();
             count++;
         }
@@ -185,7 +194,6 @@ public class Database {
             Connection c = Connect.getConnection();
             Statement stmt = c.createStatement();
             stmt.execute(sqlCreate);
-
     }
 
     public void deleteElav(String rel, Integer elavsKode) throws Exception{

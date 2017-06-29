@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS %s.optagetvej
 (
-  uuid character varying(32) unique,
+  uuid character varying(255) unique,
   featureid double precision,
   featurecode smallint,
   featuretype character varying(40),

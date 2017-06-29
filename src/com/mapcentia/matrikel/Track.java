@@ -25,18 +25,21 @@ public class Track {
         try {
             ts = rs.getString("ts");
         } catch (Exception e) {
-            ts = "2017-06-29 02:27:05";
+            // Start date in the past
+            ts = "1970-01-01 00:00:00";
+            //ts = "2017-06-28 02:27:05";
         }
         stmt.close();
         return ts;
     }
 
-    void storeInDb(String val) throws Exception {
+    void storeInDb(String val, Integer elavskode) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
         java.util.Date ts = sdf.parse(val);
         Connection c = Connect.getConnection();
-        PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + "(ts) VALUES(?)");
-        pstmt.setTimestamp(1,new java.sql.Timestamp(ts.getTime()));
+        PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + "(ts,elavskode) VALUES(?,?)");
+        pstmt.setTimestamp(1, new java.sql.Timestamp(ts.getTime()));
+        pstmt.setInt(2, elavskode);
         pstmt.executeUpdate();
         pstmt.close();
     }

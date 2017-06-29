@@ -29,7 +29,6 @@ public class Parser {
         Database database = new Database();
 
 
-
         // create a new DocumentBuilderFactory
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -88,7 +87,7 @@ public class Parser {
                 jordstykke.registreringsdato = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:registreringsdato").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
                 jordstykke.geometridato = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:geometridato").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
                 jordstykke.timeOfCreation = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:timeOfCreation").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
-                jordstykke.surfaceProperty =nodeToString(e.getElementsByTagName("gml:surfaceProperty").item(0).getChildNodes().item(1));
+                jordstykke.surfaceProperty = nodeToString(e.getElementsByTagName("gml:surfaceProperty").item(0).getChildNodes().item(1));
                 if (e.getElementsByTagName("matrikel:arealType").item(0) != null) {
                     jordstykke.arealType = e.getElementsByTagName("matrikel:arealType").item(0).getFirstChild().getNodeValue();
                 }
@@ -123,7 +122,7 @@ public class Parser {
                 optagetVej.kms_SagsID = Double.parseDouble(e.getElementsByTagName("matrikel:kms_SagsID").item(0).getFirstChild().getNodeValue());
                 optagetVej.dq_ProdMetode = e.getElementsByTagName("matrikel:dq_ProdMetode").item(0).getFirstChild().getNodeValue();
                 optagetVej.timeOfCreation = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:timeOfCreation").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
-                optagetVej.curveProperty =nodeToString(e.getElementsByTagName("gml:curveProperty").item(0).getChildNodes().item(1));
+                optagetVej.curveProperty = nodeToString(e.getElementsByTagName("gml:curveProperty").item(0).getChildNodes().item(1));
                 optagetVeje.add(optagetVej);
             }
             if (nodes.item(i).getNodeName() == "matrikel:Centroide" && nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -141,7 +140,7 @@ public class Parser {
                 centroide.kms_SagsID = Double.parseDouble(e.getElementsByTagName("matrikel:kms_SagsID").item(0).getFirstChild().getNodeValue());
                 centroide.kms_Journalnummer = (e.getElementsByTagName("matrikel:kms_Journalnummer").item(0) != null) ? e.getElementsByTagName("matrikel:kms_Journalnummer").item(0).getFirstChild().getNodeValue() : null;
                 centroide.timeOfCreation = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:timeOfCreation").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
-                centroide.pointProperty =nodeToString(e.getElementsByTagName("gml:pointProperty").item(0).getChildNodes().item(1));
+                centroide.pointProperty = nodeToString(e.getElementsByTagName("gml:pointProperty").item(0).getChildNodes().item(1));
                 centroider.add(centroide);
             }
             if (nodes.item(i).getNodeName() == "matrikel:Fredskov" && nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -159,7 +158,12 @@ public class Parser {
                 fredskov.temaOmfang = e.getElementsByTagName("matrikel:temaOmfang").item(0).getFirstChild().getNodeValue();
                 fredskov.areal = Integer.parseInt(e.getElementsByTagName("matrikel:areal").item(0).getFirstChild().getNodeValue());
                 fredskov.timeOfCreation = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:timeOfCreation").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
-                fredskov.surfaceProperty =nodeToString(e.getElementsByTagName("gml:surfaceProperty").item(0).getChildNodes().item(1));
+                if (e.getElementsByTagName("gml:surfaceProperty").item(0) != null) {
+                    fredskov.surfaceProperty = nodeToString(e.getElementsByTagName("gml:surfaceProperty").item(0).getChildNodes().item(1));
+                }
+                if (e.getElementsByTagName("gml:multiSurfaceProperty").item(0) != null) {
+                    fredskov.surfaceProperty = nodeToString(e.getElementsByTagName("gml:multiSurfaceProperty").item(0).getChildNodes().item(1));
+                }
                 fredskove.add(fredskov);
             }
             if (nodes.item(i).getNodeName() == "matrikel:Strandbeskyttelse" && nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -177,7 +181,12 @@ public class Parser {
                 strandbeskyttelse.temaOmfang = e.getElementsByTagName("matrikel:temaOmfang").item(0).getFirstChild().getNodeValue();
                 strandbeskyttelse.areal = Integer.parseInt(e.getElementsByTagName("matrikel:areal").item(0).getFirstChild().getNodeValue());
                 strandbeskyttelse.timeOfCreation = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:timeOfCreation").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
-                strandbeskyttelse.surfaceProperty =nodeToString(e.getElementsByTagName("gml:surfaceProperty").item(0).getChildNodes().item(1));
+                if (e.getElementsByTagName("gml:surfaceProperty").item(0) != null) {
+                    strandbeskyttelse.surfaceProperty = nodeToString(e.getElementsByTagName("gml:surfaceProperty").item(0).getChildNodes().item(1));
+                }
+                if (e.getElementsByTagName("gml:multiSurfaceProperty").item(0) != null) {
+                    strandbeskyttelse.surfaceProperty = nodeToString(e.getElementsByTagName("gml:multiSurfaceProperty").item(0).getChildNodes().item(1));
+                }
                 strandbeskyttelser.add(strandbeskyttelse);
             }
         }

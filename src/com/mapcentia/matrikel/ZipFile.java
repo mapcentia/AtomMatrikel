@@ -9,18 +9,12 @@ import java.util.zip.ZipInputStream;
  */
 public class ZipFile {
     public ZipInputStream getGml(String fileName) throws Exception {
-
         String code = fileName.split("_")[0];
-
-
-
-        FileInputStream fin = new FileInputStream(fileName);
-        ZipInputStream zin = new ZipInputStream(fin);
+        ZipInputStream zin = new ZipInputStream(new FileInputStream(fileName), java.nio.charset.Charset.forName("UTF-8"));
         ZipEntry ze;
         while ((ze = zin.getNextEntry()) != null) {
             if (ze.getName().equals(code + "_GML_UTM32-EUREF89/MINIMAKS/" + code +".gml")) {
                 //System.out.println("Gotha !");
-
                 break;
             }
         }
