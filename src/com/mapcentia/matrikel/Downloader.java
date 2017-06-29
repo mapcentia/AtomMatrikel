@@ -14,8 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.SocketException;
+import java.io.File;
+
+import java.util.zip.ZipInputStream;
 
 import org.apache.commons.net.ftp.*;
 
@@ -36,101 +37,125 @@ public final class Downloader {
     }
 
     public void read() throws Exception {
-
         FTPClient ftpClient = new FTPClient();
-        FileOutputStream fos;
-
         ftpClient.setBufferSize(1024 * 1024);
-
+        ftpClient.setDefaultTimeout(1000);
+        ftpClient.setDataTimeout(10000);
         ZipFile zipFile = new ZipFile();
-
-/*
+        Parser parser = new Parser();
         URL feedUrl = new URL("https://download.kortforsyningen.dk/sites/default/files/feeds/MATRIKELKORT_GML.xml");
-
         SyndFeedInput input = new SyndFeedInput();
+        System.out.println("Henter Atom feed....\n");
+
         SyndFeed feed = input.build(new XmlReader(feedUrl));
-
-        System.out.println("Feed Title: " + feed.getTitle());
-
+        System.out.println("Feed Titel: " + feed.getTitle());
         Date lastPublishedDate;
         Date currentDate;
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String fileName;
-*/
-        zipFile.getGml("2006658_GML_UTM32-EUREF89.zip");
-/*
-        ftpClient.connect("ftp.kortforsyningen.dk");
+        Integer elavsKode;
 
-        boolean login = ftpClient.login(user, pw);
+        Track track = new Track();
+        String lastStr = track.getLastFromDb();
+        lastPublishedDate = sdf.parse(lastStr);
 
-        if (login) {
-            System.out.println("Connect established...");
+        System.out.println("\nSidste entry: " + lastStr + "\n");
 
-        } else {
-            System.out.println("Connect fail...");
-
-            throw new Exception();
-        }
+        this.login(ftpClient);
 
         for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
 
-            lastPublishedDate = sdf.parse("Thu Jun 22 02:17:48 CEST 2017");
+            System.out.println("\n--------------\n");
 
             currentDate = entry.getPublishedDate();
 
             if (currentDate.before(lastPublishedDate) || currentDate.equals(lastPublishedDate)) {
                 break;
-
-                // TODO Insert currentDate as lastPublishedDate in db
-
             }
 
-            //System.out.println("Title: " + entry.getTitle());
-            //System.out.println("Unique Identifier: " + entry.getUri());
-            System.out.println("Published Date: " + entry.getPublishedDate());
+            track.storeInDb(currentDate.toString());
+
+            System.out.println("Published Date: " + entry.getPublishedDate() + "\n");
 
             // Get the Links
             for (SyndLinkImpl link : (List<SyndLinkImpl>) entry.getLinks()) {
                 System.out.println("Link: " + link.getHref());
-
                 fileName = link.getHref().split("/")[7];
+                elavsKode = Integer.valueOf(fileName.split("_")[0]);
 
-                ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                // Get the file
+                this.c(ftpClient, fileName, zipFile);
 
-                fos = new FileOutputStream(fileName);
-                boolean download = ftpClient.retrieveFile("atomfeeds/MATRIKELKORT/ATOM/GML/" + fileName, fos);
-                if (download) {
-                    System.out.println("File downloaded successfully !");
+                // Get xml stream from zip-file
+                ZipInputStream zin = zipFile.getGml(fileName);
 
-                    zipFile.getGml(fileName);
+                // Parse the xml and insert in database
+                parser.build(zin, elavsKode);
 
-                } else {
-                    System.out.println("Error in downloading file !");
-                }
+                // Delete the file
+                File file = new File(fileName);
+                file.delete();
             }
-
-            // Get the Contents
-            for (SyndContentImpl content : (List<SyndContentImpl>) entry.getContents()) {
-                // System.out.println("Content: " + content.getValue());
-            }
-
-            // Get the Categories
-            for (SyndCategoryImpl category : (List<SyndCategoryImpl>) entry.getCategories()) {
-                // System.out.println("Category: " + category.getName());
-            }
-
 
         }
+        // logout the user, returned true if logout successfully
+        ftpClient.disconnect();
+        System.out.println("FTP forbindelse afbrydes...");
 
-        // logout the u  ser, returned true if logout successfully
-        boolean logout = ftpClient.logout();
 
-        if (logout) {
-            System.out.println("FTP close...");
+    }
+
+    public void c(FTPClient ftpClient, String fileName, ZipFile zipFile) throws Exception {
+        FileOutputStream fos;
+        try {
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            fos = new FileOutputStream(fileName);
+            boolean download = ftpClient.retrieveFile("atomfeeds/MATRIKELKORT/ATOM/GML/" + fileName, fos);
+            if (download) {
+                System.out.println("Fil downloaded !");
+            } else {
+                System.out.println("Fejl i downloading af fil !");
+                Thread.sleep(1000);
+                System.out.println("Reconnecting....\n");
+                ftpClient.disconnect();
+                this.login(ftpClient);
+                // Recursive call
+                this.c(ftpClient, fileName, zipFile);
+            }
+        } catch (Exception e) {
+            System.out.println("Socket timeout....\n");
+            Thread.sleep(1000);
+            System.out.println("Reconnecting....\n");
+            ftpClient.disconnect();
+            this.login(ftpClient);
+            // Recursive call
+            this.c(ftpClient, fileName, zipFile);
         }
+    }
 
-*/
+    public void login(FTPClient ftpClient) throws Exception {
+        boolean login = false;
+        try {
+            ftpClient.connect("ftp.kortforsyningen.dk");
+            login = ftpClient.login(user, pw);
+
+        } catch (Exception e) {
+            System.out.println("Connect error....\n");
+            Thread.sleep(1000);
+            System.out.println("Reconnecting....\n");
+            // Recursive call
+            this.login(ftpClient);
+        }
+        if (login) {
+            System.out.println("Forbindelse etableret...");
+            ftpClient.setSoTimeout(100);
+        } else {
+            System.out.println("Login fejlede...");
+            ftpClient.disconnect();
+            // Recursive call
+            this.login(ftpClient);
+
+        }
     }
 
 }

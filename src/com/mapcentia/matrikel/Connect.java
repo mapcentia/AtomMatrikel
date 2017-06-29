@@ -35,6 +35,7 @@ public final class Connect {
 
     static Connection open() throws Exception {
         c = DriverManager.getConnection(url, user, pw);
+        c.setAutoCommit(false);
         return c;
     }
 }

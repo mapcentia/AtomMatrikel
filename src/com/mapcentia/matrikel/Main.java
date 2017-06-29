@@ -24,7 +24,6 @@ public class Main {
 
         Connection c = Connect.open();
 
-
         Downloader downloader = new Downloader();
         downloader.read();
 
