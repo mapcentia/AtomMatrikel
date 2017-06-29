@@ -51,7 +51,7 @@ public class Parser {
         Deque<OptagetVej> optagetVeje = new ArrayDeque<>();
         Deque<Centroide> centroider = new ArrayDeque<>();
         Deque<Fredskov> fredskove = new ArrayDeque<>();
-        Deque<FredskovLinie> fredskovLinier = new ArrayDeque<>();
+        Deque<Strandbeskyttelse> strandbeskyttelser = new ArrayDeque<>();
 
         for (int i = 0; i < nodes.getLength(); i++) {
             if (nodes.item(i).getNodeName() == "matrikel:Jordstykke" && nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -162,29 +162,30 @@ public class Parser {
                 fredskov.surfaceProperty =nodeToString(e.getElementsByTagName("gml:surfaceProperty").item(0).getChildNodes().item(1));
                 fredskove.add(fredskov);
             }
-            if (nodes.item(i).getNodeName() == "matrikel:FredskovLinie" && nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+            if (nodes.item(i).getNodeName() == "matrikel:Strandbeskyttelse" && nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 NodeList cNodes = nodes.item(i).getChildNodes();
                 Element e = (Element) cNodes;
-                FredskovLinie fredskovLinie = new FredskovLinie();
-                fredskovLinie.uuid = nodes.item(i).getAttributes().getNamedItem("gml:id").getNodeValue();
-                fredskovLinie.featureID = Double.parseDouble(e.getElementsByTagName("matrikel:featureID").item(0).getFirstChild().getNodeValue());
-                fredskovLinie.temaFladeId = Integer.parseInt(e.getElementsByTagName("matrikel:temaFladeId").item(0).getFirstChild().getNodeValue());
-                fredskovLinie.featureCode = Integer.parseInt(e.getElementsByTagName("matrikel:featureCode").item(0).getFirstChild().getNodeValue());
-                fredskovLinie.featureType = e.getElementsByTagName("matrikel:featureType").item(0).getFirstChild().getNodeValue();
-                fredskovLinie.kms_SagsID = Double.parseDouble(e.getElementsByTagName("matrikel:kms_SagsID").item(0).getFirstChild().getNodeValue());
-                fredskovLinie.kms_Journalnummer = e.getElementsByTagName("matrikel:kms_Journalnummer").item(0).getFirstChild().getNodeValue();
-                fredskovLinie.matrikelSkelID = Integer.parseInt(e.getElementsByTagName("matrikel:matrikelSkelID").item(0).getFirstChild().getNodeValue());
-                fredskovLinie.forloeb = e.getElementsByTagName("matrikel:forloeb").item(0).getFirstChild().getNodeValue();
-                fredskovLinie.timeOfCreation = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:timeOfCreation").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
-                fredskovLinie.curveProperty =nodeToString(e.getElementsByTagName("gml:curveProperty").item(0).getChildNodes().item(1));
-                fredskovLinier.add(fredskovLinie);
+                Strandbeskyttelse strandbeskyttelse = new Strandbeskyttelse();
+                strandbeskyttelse.uuid = nodes.item(i).getAttributes().getNamedItem("gml:id").getNodeValue();
+                strandbeskyttelse.featureID = Double.parseDouble(e.getElementsByTagName("matrikel:featureID").item(0).getFirstChild().getNodeValue());
+                strandbeskyttelse.featureCode = Integer.parseInt(e.getElementsByTagName("matrikel:featureCode").item(0).getFirstChild().getNodeValue());
+                strandbeskyttelse.featureType = e.getElementsByTagName("matrikel:featureType").item(0).getFirstChild().getNodeValue();
+                strandbeskyttelse.ejerlavsnavn = e.getElementsByTagName("matrikel:ejerlavsnavn").item(0).getFirstChild().getNodeValue();
+                strandbeskyttelse.landsejerlavskode = Double.parseDouble(e.getElementsByTagName("matrikel:landsejerlavskode").item(0).getFirstChild().getNodeValue());
+                strandbeskyttelse.matrikelnummer = e.getElementsByTagName("matrikel:matrikelnummer").item(0).getFirstChild().getNodeValue();
+                strandbeskyttelse.jordstykkeID = Integer.parseInt(e.getElementsByTagName("matrikel:jordstykkeID").item(0).getFirstChild().getNodeValue());
+                strandbeskyttelse.temaOmfang = e.getElementsByTagName("matrikel:temaOmfang").item(0).getFirstChild().getNodeValue();
+                strandbeskyttelse.areal = Integer.parseInt(e.getElementsByTagName("matrikel:areal").item(0).getFirstChild().getNodeValue());
+                strandbeskyttelse.timeOfCreation = java.sql.Timestamp.valueOf(e.getElementsByTagName("matrikel:timeOfCreation").item(0).getFirstChild().getNodeValue().replace("T", " ").replace("Z", ""));
+                strandbeskyttelse.surfaceProperty =nodeToString(e.getElementsByTagName("gml:surfaceProperty").item(0).getChildNodes().item(1));
+                strandbeskyttelser.add(strandbeskyttelse);
             }
         }
         database.insertJordstykker(jordstykker, elavsKode);
         database.insertOptagetVej(optagetVeje, elavsKode);
         database.insertCentroide(centroider, elavsKode);
         database.insertFredskov(fredskove, elavsKode);
-        database.insertFredskovLinier(fredskovLinier, elavsKode);
+        database.insertStrandbeskyttelse(strandbeskyttelser, elavsKode);
     }
 
     private String nodeToString(Node node) throws TransformerException {

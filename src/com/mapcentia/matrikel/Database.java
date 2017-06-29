@@ -1,8 +1,6 @@
 package com.mapcentia.matrikel;
 
 import com.mapcentia.matrikel.models.*;
-
-import javax.xml.bind.Element;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +8,6 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.*;
 import java.lang.reflect.Field;
-
 
 /**
  * Created by mh on 6/22/17.
@@ -21,7 +18,7 @@ public class Database {
     private final String OPTAGETVEJ = "optagetVej.sql";
     private final String CENTROIDE = "centroide.sql";
     private final String FREDSKOV = "fredskov.sql";
-    private final String FREDSKOVLINIER = "fredskovLinier.sql";
+    private final String STRANDBESKYTTELSE = "strandbeskyttelse.sql";
 
     Configuration configuration = new Configuration();
 
@@ -151,14 +148,14 @@ public class Database {
         System.out.print("\n");
         pstmt.close();
     }
-    public void insertFredskovLinier(Deque<FredskovLinie> fredskovLinier, Integer elavsKode) throws Exception {
-        createTable(FREDSKOVLINIER);
-        String rel = configuration.getSchema() + "." + "fredskovlinier";
+    public void insertStrandbeskyttelse(Deque<Strandbeskyttelse> strandbeskyttelser, Integer elavsKode) throws Exception {
+        createTable(STRANDBESKYTTELSE);
+        String rel = configuration.getSchema() + "." + "strandbeskyttelse";
         deleteElav(rel, elavsKode);
         Connection c = Connect.getConnection();
         PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromGML(?,25832))");
         int count = 1;
-        for (FredskovLinie item : fredskovLinier) {
+        for (Strandbeskyttelse item : strandbeskyttelser) {
             int n = 0;
             System.out.print("\rIndsætter fredskove... " + count);
             System.out.flush();
