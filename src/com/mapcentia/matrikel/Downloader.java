@@ -74,7 +74,6 @@ public final class Downloader {
                 break;
             }
 
-
             System.out.println("Published Date: " + entry.getPublishedDate() + "\n");
 
             // Get the Links

@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS %s.jordstykke
 (
-  uuid character varying(255) unique,
+  gid serial,
+  uuid character varying(255),
   featureid double precision,
   featurecode smallint,
   featuretype character varying(40),
@@ -39,5 +40,5 @@ CREATE TABLE IF NOT EXISTS %s.jordstykke
   geometridato date,
   timeofcreation date,
   the_geom geometry(polygon,25832),
-  CONSTRAINT jordstykke_pkey PRIMARY KEY (uuid)
+  CONSTRAINT jordstykke_pkey PRIMARY KEY (gid)
 )

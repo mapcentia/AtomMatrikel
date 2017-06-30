@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS %s.strandbeskyttelse
 (
-  uuid character varying(255) unique,
+  gid serial,
+  uuid character varying(255),
   featureid double precision,
   featurecode smallint,
   featuretype character varying(40),
@@ -12,5 +13,5 @@ CREATE TABLE IF NOT EXISTS %s.strandbeskyttelse
   areal int,
   timeofcreation date,
   the_geom geometry(multipolygon,25832),
-  constraint strandbeskyttelse_pkey primary key (uuid)
+  constraint strandbeskyttelse_pkey primary key (gid)
 )

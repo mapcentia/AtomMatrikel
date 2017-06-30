@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS %s.centroide
 (
-  uuid character varying(255) unique,
+  gid serial,
+  uuid character varying(255),
   featureid double precision,
   featurecode smallint,
   featuretype character varying(40),
@@ -12,5 +13,5 @@ CREATE TABLE IF NOT EXISTS %s.centroide
   kms_journalnummer character varying(12),
   timeofcreation date,
   the_geom geometry(point,25832),
-  constraint centroide_pkey primary key (uuid)
+  constraint centroide_pkey primary key (gid)
 )

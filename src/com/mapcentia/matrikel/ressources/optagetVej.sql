@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS %s.optagetvej
 (
-  uuid character varying(255) unique,
+  gid serial,
+  uuid character varying(255),
   featureid double precision,
   featurecode smallint,
   featuretype character varying(40),
@@ -12,5 +13,5 @@ CREATE TABLE IF NOT EXISTS %s.optagetvej
   dq_prodmetode character varying(255),
   timeofcreation date,
   the_geom geometry(linestring,25832),
-  constraint optagetvej_pkey primary key (uuid)
+  constraint optagetvej_pkey primary key (gid)
 )
