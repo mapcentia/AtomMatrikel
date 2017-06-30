@@ -150,7 +150,7 @@ public final class Downloader {
         }
         if (login) {
             System.out.println("Forbindelse etableret...");
-            ftpClient.setSoTimeout(500);
+            ftpClient.setSoTimeout(2000);
         } else {
             System.out.println("Login fejlede...");
             ftpClient.disconnect();
