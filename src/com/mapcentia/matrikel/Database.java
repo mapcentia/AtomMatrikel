@@ -178,6 +178,7 @@ public class Database {
         }
         System.out.print("\n");
         pstmt.close();
+
     }
 
     public void createTable(String name) throws Exception {
