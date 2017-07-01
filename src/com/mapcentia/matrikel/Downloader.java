@@ -110,6 +110,7 @@ public final class Downloader {
     public void c(FTPClient ftpClient, String fileName, ZipFile zipFile) throws Exception {
         FileOutputStream fos;
         try {
+            ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             fos = new FileOutputStream(fileName);
             boolean download = ftpClient.retrieveFile("atomfeeds/MATRIKELKORT/ATOM/GML/" + fileName, fos);
@@ -125,6 +126,8 @@ public final class Downloader {
                 this.c(ftpClient, fileName, zipFile);
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+
             System.out.println("Socket timeout....\n");
             Thread.sleep(1000);
             System.out.println("Reconnecting....\n");
@@ -150,7 +153,7 @@ public final class Downloader {
         }
         if (login) {
             System.out.println("Forbindelse etableret...");
-            ftpClient.setSoTimeout(2000);
+            ftpClient.setSoTimeout(100);
         } else {
             System.out.println("Login fejlede...");
             ftpClient.disconnect();
