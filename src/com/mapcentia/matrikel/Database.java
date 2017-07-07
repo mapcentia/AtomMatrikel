@@ -29,11 +29,13 @@ public class Database {
         Connection c = Connect.getConnection();
         PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(default,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromGML(?,25832))");
         int count = 1;
+
+        Field[] fields = Jordstykke.class.getDeclaredFields();
+
         for (Jordstykke item : jordstykker) {
             int n = 0;
             System.out.print("\rIndsætter jordstykker... " + count);
             System.out.flush();
-            Field[] fields = item.getClass().getDeclaredFields();
             for (Field f : fields) {
                 if (f.getType() == (Class.forName("java.lang.String"))) {
                     pstmt.setString(++n, (String) f.get(item));
@@ -61,11 +63,13 @@ public class Database {
         Connection c = Connect.getConnection();
         PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(default,?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromGML(?,25832))");
         int count = 1;
+
+        Field[] fields = OptagetVej.class.getDeclaredFields();
+
         for (OptagetVej item : optagetVeje) {
             int n = 0;
             System.out.print("\rIndsætter optaget veje... " + count);
             System.out.flush();
-            Field[] fields = item.getClass().getDeclaredFields();
             for (Field f : fields) {
                 if (f.getType() == (Class.forName("java.lang.String"))) {
                     pstmt.setString(++n, (String) f.get(item));
@@ -93,11 +97,13 @@ public class Database {
         Connection c = Connect.getConnection();
         PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(default,?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromGML(?,25832))");
         int count = 1;
+
+        Field[] fields = Centroide.class.getDeclaredFields();
+
         for (Centroide item : centroider) {
             int n = 0;
             System.out.print("\rIndsætter centroider... " + count);
             System.out.flush();
-            Field[] fields = item.getClass().getDeclaredFields();
             for (Field f : fields) {
                 if (f.getType() == (Class.forName("java.lang.String"))) {
                     pstmt.setString(++n, (String) f.get(item));
@@ -124,11 +130,13 @@ public class Database {
         Connection c = Connect.getConnection();
         PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(default,?,?,?,?,?,?,?,?,?,?,?,ST_MULTI(ST_GeomFromGML(?,25832)))");
         int count = 1;
+
+        Field[] fields = Fredskov.class.getDeclaredFields();
+
         for (Fredskov item : fredskove) {
             int n = 0;
             System.out.print("\rIndsætter fredskove... " + count);
             System.out.flush();
-            Field[] fields = item.getClass().getDeclaredFields();
             for (Field f : fields) {
                 if (f.getType() == (Class.forName("java.lang.String"))) {
                     pstmt.setString(++n, (String) f.get(item));
@@ -155,11 +163,13 @@ public class Database {
         Connection c = Connect.getConnection();
         PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + " VALUES(default,?,?,?,?,?,?,?,?,?,?,?,ST_MULTI(ST_GeomFromGML(?,25832)))");
         int count = 1;
+
+        Field[] fields = Strandbeskyttelse.class.getDeclaredFields();
+
         for (Strandbeskyttelse item : strandbeskyttelser) {
             int n = 0;
             System.out.print("\rIndsætter strandbeskyttelser... " + count);
             System.out.flush();
-            Field[] fields = item.getClass().getDeclaredFields();
             for (Field f : fields) {
                 if (f.getType() == (Class.forName("java.lang.String"))) {
                     pstmt.setString(++n, (String) f.get(item));
