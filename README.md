@@ -1,5 +1,5 @@
 # Repliker Matrikelkortet for hele Danmark
-Repliker Matrikelkortet for hele Danmark til lokal database og hold den opdateret med ændringer på daglig basis.
+Repliker Matrikelkortet for hele Danmark til lokal database og hold den opdateret med ændringer dagligt.
 
 ## Hvordan bruges replikatoren
 Replikatoren er et kommandolinje-værktøj skrevet i Java og derfor kan anvendes på alle platforme (Windows, Linux, Mac mv.)
