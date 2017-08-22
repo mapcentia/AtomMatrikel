@@ -1,5 +1,5 @@
 # Repliker Matrikelkortet for hele Danmark
-Repliker Matrikelkortet for hele Danmark til lokal database og hold den opdateret med ændringer på daglig basis.
+Repliker Matrikelkortet for hele Danmark til lokal database og hold den opdateret med ændringer dagligt.
 
 ## Hvordan bruges replikatoren
 Replikatoren er et kommandolinje-værktøj skrevet i Java og derfor kan anvendes på alle platforme (Windows, Linux, Mac mv.)
@@ -50,8 +50,4 @@ Ovenstående kommando kan indsættes i en job scheduler og køres en gang om dag
 
 ### Note om hukommelsesforbrug
 Kortforsyningens Atom feed publicerer alle data for et ejerlav i et stort XML dokument. For de største ejerlav kan dette dokument være relativt stort og indlæsningen kræver en vis mængde hukommelse.   
-Det anbefales at have min. 4GB til rådighed. Endvidere kan det være en fordel at vælge garbage collector'en "Concurrent Mark Sweep (CMS) Collector", som gøres på denne måde: 
-
-```
-java -jar -XX:+UseConcMarkSweepGC AtomMatrikel.jar config.yml
-```
+Det anbefales at have min. 4GB fri RAM til rådighed.
