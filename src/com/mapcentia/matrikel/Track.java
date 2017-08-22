@@ -2,6 +2,7 @@ package com.mapcentia.matrikel;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by mh on 6/28/17.
@@ -34,7 +35,7 @@ public class Track {
     }
 
     void storeInDb(String val, Integer elavskode) throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         java.util.Date ts = sdf.parse(val);
         Connection c = Connect.getConnection();
         PreparedStatement pstmt = c.prepareStatement("INSERT INTO " + rel + "(ts,elavskode) VALUES(?,?)");
