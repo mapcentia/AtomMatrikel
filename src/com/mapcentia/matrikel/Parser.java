@@ -1,7 +1,5 @@
 package com.mapcentia.matrikel;
 
-import java.util.Date;
-import java.util.UUID;
 import java.util.zip.ZipInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
